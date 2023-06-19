@@ -1,6 +1,7 @@
 # mobistory_flutter
 
-Fuck!!!!!!!!!!!1You!!!!!!!!!!!!!!!
+A mobile application which allows user to explore past events.
+It's have a simple and intuitive interface.
 
 ## Getting Started
 
