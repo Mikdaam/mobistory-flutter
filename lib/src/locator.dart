@@ -1,10 +1,14 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobistory/src/data/datasource/local/app_database.dart';
+import 'package:mobistory/src/data/datasource/remote/wikipedia_api_service.dart';
+import 'package:mobistory/src/data/repositories/api_repository_impl.dart';
 import 'package:mobistory/src/data/repositories/database_repository_impl.dart';
 import 'package:mobistory/src/domain/model/event.dart';
+import 'package:mobistory/src/domain/repositories/api_repository.dart';
 import 'package:mobistory/src/domain/repositories/database_repository.dart';
 import 'package:mobistory/src/utils/constants/strings.dart';
 
@@ -25,7 +29,19 @@ Future<void> initializeLocator() async {
   _fillFromJSON(appDatabase);
   locator.registerSingleton<AppDatabase>(appDatabase);
 
+  final dio = Dio();
+
   locator.registerSingleton<DatabaseRepository>(
       DatabaseRepositoryImpl(locator<AppDatabase>().eventDao)
+  );
+
+  locator.registerSingleton<Dio>(dio);
+
+  locator.registerSingleton<WikipediaApiService>(
+      WikipediaApiService(locator<Dio>())
+  );
+
+  locator.registerSingleton<ApiRepository>(
+      ApiRepositoryImpl(locator<WikipediaApiService>())
   );
 }

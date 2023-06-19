@@ -138,7 +138,7 @@ class EventsScreen extends HookWidget {
                     ),
                   if (event.pointInTime != DateTime.parse("0001-01-01"))
                     Text(
-                      "${event.pointInTime.year}",
+                      "${event.pointInTime.year}/${event.pointInTime.month}/${event.pointInTime.day}",
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                   const SizedBox(

@@ -50,7 +50,7 @@ class AppRouter extends _i6.RootStackRouter {
         child: const _i2.EmptyRouterPage(),
       );
     },
-    EventListRoute.name: (routeData) {
+    EventsRoute.name: (routeData) {
       return _i6.MaterialPageX<dynamic>(
         routeData: routeData,
         child: const _i3.EventsScreen(),
@@ -82,7 +82,7 @@ class AppRouter extends _i6.RootStackRouter {
               parent: MainRoute.name,
               children: [
                 _i6.RouteConfig(
-                  EventListRoute.name,
+                  EventsRoute.name,
                   path: '',
                   parent: EventsRouter.name,
                 ),
@@ -192,14 +192,14 @@ class FavoritesRouter extends _i6.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i3.EventsScreen]
-class EventListRoute extends _i6.PageRouteInfo<void> {
-  const EventListRoute()
+class EventsRoute extends _i6.PageRouteInfo<void> {
+  const EventsRoute()
       : super(
-          EventListRoute.name,
+          EventsRoute.name,
           path: '',
         );
 
-  static const String name = 'EventListRoute';
+  static const String name = 'EventsRoute';
 }
 
 /// generated route for
