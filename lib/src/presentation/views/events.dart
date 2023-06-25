@@ -1,8 +1,11 @@
 import 'dart:math';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mobistory/src/core/router/app_router.gr.dart';
 import 'package:mobistory/src/domain/model/event.dart';
 import 'package:mobistory/src/presentation/cubits/events/events_cubit.dart';
 import 'package:mobistory/src/presentation/cubits/favorite_events/favorite_events_cubit.dart';
@@ -19,18 +22,15 @@ class EventsScreen extends HookWidget {
       length: 2, // This is the number of tabs.
       child: Scaffold(
         appBar: AppBar(
-            flexibleSpace: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: const [
-                TabBar(
-                  tabs: [
-                    Tab(text: 'List'),
-                    Tab(text: 'Timeline'),
-                  ],
-                  labelStyle: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
-                ),
+          title: const Text('Events'),
+            bottom: const TabBar(
+              tabs: [
+                Tab(text: 'List'),
+                Tab(text: 'Timeline'),
               ],
-            )),
+              labelStyle: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
+            ),
+        ),
         body: BlocBuilder<EventsCubit, EventsState>(
             builder: (context, state) => TabBarView(
               children: [
@@ -68,7 +68,7 @@ class EventsScreen extends HookWidget {
         final event = events[index];
         return EventListItem(
           event: event,
-          onItemClick: (event) {},
+          onItemClick: (event) => context.router.push(EventDetailsRoute(eventId: event.id)),
           onFavoriteClick: (event) {
             context.read<FavoritesCubit>().toggleFavorite(event);
             context.read<EventsCubit>().loadEvents();
@@ -114,13 +114,22 @@ class EventsScreen extends HookWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  /*if (event.imageUrl != null)
-                    Image.network(
-                      event.imageUrl!,
-                      fit: BoxFit.fitWidth,
-                      width: 100,
-                      height: 100,
-                    ),*/
+                  if (event.image != null)
+                    if (event.image!.endsWith(".svg"))
+                      SvgPicture.network(
+                        event.image!,
+                        fit: BoxFit.fitWidth,
+                        // width: 100,
+                        height: 100,
+                        placeholderBuilder: (BuildContext context) => const CircularProgressIndicator(),
+                      )
+                    else
+                      Image.network(
+                        event.image!,
+                        fit: BoxFit.fitWidth,
+                        // width: 100,
+                        height: 100,
+                      ),
                   const SizedBox(
                     height: 8.0,
                   ),

@@ -13,6 +13,11 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
   }
 
   @override
+  Future<Event?> getEvent(int id) {
+    return _eventDao.getEventById(id);
+  }
+
+  @override
   Future<List<Event>> getFavoriteEvents() {
     return _eventDao.getFavoriteEvents();
   }

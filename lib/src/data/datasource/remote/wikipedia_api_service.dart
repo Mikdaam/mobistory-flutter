@@ -1,12 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:retrofit/http.dart';
+import 'package:retrofit/retrofit.dart';
 
 part 'wikipedia_api_service.g.dart';
 
 @JsonSerializable()
 class WikipediaResponse {
+  @JsonKey(name: 'batchcomplete')
   bool batchComplete;
+
+  @JsonKey(name: 'query')
   WikipediaQuery query;
 
   WikipediaResponse({required this.batchComplete, required this.query});
@@ -19,6 +22,7 @@ class WikipediaResponse {
 
 @JsonSerializable()
 class WikipediaQuery {
+  @JsonKey(name: 'pages')
   List<WikipediaPage> pages;
 
   WikipediaQuery({required this.pages});
@@ -31,9 +35,13 @@ class WikipediaQuery {
 
 @JsonSerializable()
 class WikipediaPage {
+  @JsonKey(name: 'pageid')
   int pageId;
+  @JsonKey(name: 'ns')
   int ns;
+  @JsonKey(name: 'title')
   String title;
+  @JsonKey(name: 'extract')
   String extract;
 
   WikipediaPage(
@@ -52,6 +60,6 @@ class WikipediaPage {
 abstract class WikipediaApiService {
   factory WikipediaApiService(Dio dio, {String baseUrl}) = _WikipediaApiService;
 
-  @GET('/w/api.php?action=query&prop=extracts&format=json&exintro=1&explaintext=1&redirects=1')
-  Future<WikipediaResponse> getEventWikipediaContent(@Query('titles') String titles);
+  @GET('/w/api.php?action=query&format=json&prop=extracts&redirects=1&formatversion=2&exlimit=20&explaintext=1')
+  Future<HttpResponse<WikipediaResponse>> getEventWikipediaContent(@Query('titles') String titles);
 }

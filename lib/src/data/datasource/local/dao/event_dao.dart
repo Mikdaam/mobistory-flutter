@@ -12,6 +12,9 @@ abstract class EventDao {
   @Query('SELECT * FROM event')
   Future<List<Event>> getAllEvents();
 
+  @Query('SELECT * FROM event WHERE id = :id')
+  Future<Event?> getEventById(int id);
+
   @Query('SELECT * FROM event WHERE isFavorite = 1')
   Future<List<Event>> getFavoriteEvents();
 

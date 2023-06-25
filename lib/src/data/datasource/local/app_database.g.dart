@@ -85,7 +85,7 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `event` (`id` INTEGER NOT NULL, `label` TEXT, `aliases` TEXT, `description` TEXT, `wikipedia` TEXT, `popularityEN` INTEGER NOT NULL, `popularityFR` INTEGER NOT NULL, `sourceId` INTEGER NOT NULL, `isFavorite` INTEGER NOT NULL, `startTime` INTEGER NOT NULL, `endTime` INTEGER NOT NULL, `pointInTime` INTEGER NOT NULL, `latitude` REAL, `longitude` REAL, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `event` (`id` INTEGER NOT NULL, `label` TEXT, `aliases` TEXT, `description` TEXT, `wikipedia` TEXT, `popularityEN` INTEGER NOT NULL, `popularityFR` INTEGER NOT NULL, `sourceId` INTEGER NOT NULL, `isFavorite` INTEGER NOT NULL, `startTime` INTEGER NOT NULL, `endTime` INTEGER NOT NULL, `pointInTime` INTEGER NOT NULL, `latitude` REAL, `longitude` REAL, `image` TEXT, PRIMARY KEY (`id`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -121,7 +121,8 @@ class _$EventDao extends EventDao {
                   'endTime': _dateTimeConverter.encode(item.endTime),
                   'pointInTime': _dateTimeConverter.encode(item.pointInTime),
                   'latitude': item.latitude,
-                  'longitude': item.longitude
+                  'longitude': item.longitude,
+                  'image': item.image
                 }),
         _eventUpdateAdapter = UpdateAdapter(
             database,
@@ -141,7 +142,8 @@ class _$EventDao extends EventDao {
                   'endTime': _dateTimeConverter.encode(item.endTime),
                   'pointInTime': _dateTimeConverter.encode(item.pointInTime),
                   'latitude': item.latitude,
-                  'longitude': item.longitude
+                  'longitude': item.longitude,
+                  'image': item.image
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -171,7 +173,30 @@ class _$EventDao extends EventDao {
             endTime: _dateTimeConverter.decode(row['endTime'] as int),
             pointInTime: _dateTimeConverter.decode(row['pointInTime'] as int),
             latitude: row['latitude'] as double?,
-            longitude: row['longitude'] as double?));
+            longitude: row['longitude'] as double?,
+            image: row['image'] as String?));
+  }
+
+  @override
+  Future<Event?> getEventById(int id) async {
+    return _queryAdapter.query('SELECT * FROM event WHERE id = ?1',
+        mapper: (Map<String, Object?> row) => Event(
+            id: row['id'] as int,
+            label: row['label'] as String?,
+            aliases: row['aliases'] as String?,
+            description: row['description'] as String?,
+            wikipedia: row['wikipedia'] as String?,
+            popularityEN: row['popularityEN'] as int,
+            popularityFR: row['popularityFR'] as int,
+            sourceId: row['sourceId'] as int,
+            isFavorite: (row['isFavorite'] as int) != 0,
+            startTime: _dateTimeConverter.decode(row['startTime'] as int),
+            endTime: _dateTimeConverter.decode(row['endTime'] as int),
+            pointInTime: _dateTimeConverter.decode(row['pointInTime'] as int),
+            latitude: row['latitude'] as double?,
+            longitude: row['longitude'] as double?,
+            image: row['image'] as String?),
+        arguments: [id]);
   }
 
   @override
@@ -191,14 +216,15 @@ class _$EventDao extends EventDao {
             endTime: _dateTimeConverter.decode(row['endTime'] as int),
             pointInTime: _dateTimeConverter.decode(row['pointInTime'] as int),
             latitude: row['latitude'] as double?,
-            longitude: row['longitude'] as double?));
+            longitude: row['longitude'] as double?,
+            image: row['image'] as String?));
   }
 
   @override
   Future<List<Event>> getTodayEvents(DateTime date) async {
     return _queryAdapter.queryList(
         'SELECT * FROM event WHERE startTime == ?1 OR endTime == ?1 OR pointInTime == ?1',
-        mapper: (Map<String, Object?> row) => Event(id: row['id'] as int, label: row['label'] as String?, aliases: row['aliases'] as String?, description: row['description'] as String?, wikipedia: row['wikipedia'] as String?, popularityEN: row['popularityEN'] as int, popularityFR: row['popularityFR'] as int, sourceId: row['sourceId'] as int, isFavorite: (row['isFavorite'] as int) != 0, startTime: _dateTimeConverter.decode(row['startTime'] as int), endTime: _dateTimeConverter.decode(row['endTime'] as int), pointInTime: _dateTimeConverter.decode(row['pointInTime'] as int), latitude: row['latitude'] as double?, longitude: row['longitude'] as double?),
+        mapper: (Map<String, Object?> row) => Event(id: row['id'] as int, label: row['label'] as String?, aliases: row['aliases'] as String?, description: row['description'] as String?, wikipedia: row['wikipedia'] as String?, popularityEN: row['popularityEN'] as int, popularityFR: row['popularityFR'] as int, sourceId: row['sourceId'] as int, isFavorite: (row['isFavorite'] as int) != 0, startTime: _dateTimeConverter.decode(row['startTime'] as int), endTime: _dateTimeConverter.decode(row['endTime'] as int), pointInTime: _dateTimeConverter.decode(row['pointInTime'] as int), latitude: row['latitude'] as double?, longitude: row['longitude'] as double?, image: row['image'] as String?),
         arguments: [_dateTimeConverter.encode(date)]);
   }
 

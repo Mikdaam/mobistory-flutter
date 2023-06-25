@@ -3,6 +3,50 @@
 part of 'wikipedia_api_service.dart';
 
 // **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+WikipediaResponse _$WikipediaResponseFromJson(Map<String, dynamic> json) =>
+    WikipediaResponse(
+      batchComplete: json['batchcomplete'] as bool,
+      query: WikipediaQuery.fromJson(json['query'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$WikipediaResponseToJson(WikipediaResponse instance) =>
+    <String, dynamic>{
+      'batchcomplete': instance.batchComplete,
+      'query': instance.query,
+    };
+
+WikipediaQuery _$WikipediaQueryFromJson(Map<String, dynamic> json) =>
+    WikipediaQuery(
+      pages: (json['pages'] as List<dynamic>)
+          .map((e) => WikipediaPage.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$WikipediaQueryToJson(WikipediaQuery instance) =>
+    <String, dynamic>{
+      'pages': instance.pages,
+    };
+
+WikipediaPage _$WikipediaPageFromJson(Map<String, dynamic> json) =>
+    WikipediaPage(
+      pageId: json['pageid'] as int,
+      ns: json['ns'] as int,
+      title: json['title'] as String,
+      extract: json['extract'] as String,
+    );
+
+Map<String, dynamic> _$WikipediaPageToJson(WikipediaPage instance) =>
+    <String, dynamic>{
+      'pageid': instance.pageId,
+      'ns': instance.ns,
+      'title': instance.title,
+      'extract': instance.extract,
+    };
+
+// **************************************************************************
 // RetrofitGenerator
 // **************************************************************************
 
@@ -21,26 +65,28 @@ class _WikipediaApiService implements WikipediaApiService {
   String? baseUrl;
 
   @override
-  Future<WikipediaResponse> getEventWikipediaContent(titles) async {
+  Future<HttpResponse<WikipediaResponse>> getEventWikipediaContent(
+      titles) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'titles': titles};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<WikipediaResponse>(Options(
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<HttpResponse<WikipediaResponse>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              '/w/api.php?action=query&prop=extracts&format=json&exintro=1&explaintext=1&redirects=1',
+              '/w/api.php?action=query&format=json&prop=extracts&redirects=1&formatversion=2&exlimit=20&explaintext=1',
               queryParameters: queryParameters,
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = WikipediaResponse.fromJson(_result.data!);
-    return value;
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {

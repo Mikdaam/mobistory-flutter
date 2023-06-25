@@ -1,5 +1,4 @@
 import 'package:floor/floor.dart';
-import 'package:logger/logger.dart';
 
 @Entity(tableName: 'event')
 class Event {
@@ -18,7 +17,7 @@ class Event {
   final DateTime pointInTime;
   final double? latitude;
   final double? longitude;
-  /*final String? image;*/
+  final String? image;
 
   Event({
     required this.id,
@@ -35,7 +34,7 @@ class Event {
     required this.pointInTime,
     required this.latitude,
     required this.longitude,
-    /*required this.image,*/
+    required this.image,
   });
 
   copyWith({
@@ -53,6 +52,7 @@ class Event {
     DateTime? pointInTime,
     double? latitude,
     double? longitude,
+    String? image,
   }) {
     return Event(
       id: id ?? this.id,
@@ -69,6 +69,7 @@ class Event {
       pointInTime: pointInTime ?? this.pointInTime,
       latitude: latitude ?? this.latitude,
       longitude: longitude ?? this.longitude,
+      image: image ?? this.image,
     );
   }
 
@@ -76,7 +77,7 @@ class Event {
     final popularity = jsonDecode['popularity'] ?? {};
     final claims = jsonDecode['claims'] ?? [];
 
-    // const IMAGE_ID = 18;
+    const imageId = 18;
     const coordinateId = 625;
     const startTimeId = 580;
     const endTimeId = 582;
@@ -86,6 +87,7 @@ class Event {
     DateTime? endTime;
     DateTime? pointInTime;
     double? latitude, longitude;
+    String? image;
 
     for (final claim in claims) {
       final claimId = claim['id'] as int;
@@ -109,12 +111,10 @@ class Event {
           latitude = double.parse(coordinatesStrings[0]);
           longitude = double.parse(coordinatesStrings[1]);
           break;
-      /*case IMAGE_ID:
-                final formatterUrl = claim['formatterUrl'] as String;
-                final imageName = claimValue.substring(8);
-                image = formatterUrl.substring(0, formatterUrl.length - 2) + imageName;
-                Log.i("claims", "Image : $image");
-                break;*/
+        case imageId:
+          final imageName = claimValue.split(":")[1].replaceAll(' ', '%20');
+          image = "https://commons.wikimedia.org/wiki/Special:FilePath/$imageName";
+          break;
       }
     }
 
@@ -131,7 +131,8 @@ class Event {
         endTime: endTime ?? DateTime.parse("0001-01-01"),
         pointInTime: pointInTime ?? DateTime.parse("0001-01-01"),
         latitude: latitude,
-        longitude: longitude
+        longitude: longitude,
+        image: image
     );
   }
 
@@ -156,5 +157,10 @@ class Event {
     }*/
 
     return DateTime.utc(year * sign, month, day);
+  }
+
+  @override
+  String toString() {
+    return 'Event{id: $id, label: $label, aliases: $aliases, description: $description, wikipedia: $wikipedia, popularityEN: $popularityEN, popularityFR: $popularityFR, sourceId: $sourceId, isFavorite: $isFavorite, startTime: $startTime, endTime: $endTime, pointInTime: $pointInTime, latitude: $latitude, longitude: $longitude, image: $image}';
   }
 }

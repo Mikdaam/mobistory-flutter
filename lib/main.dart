@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:mobistory/src/core/router/app_router.gr.dart';
+import 'package:mobistory/src/domain/repositories/api_repository.dart';
 import 'package:mobistory/src/domain/repositories/database_repository.dart';
 import 'package:mobistory/src/locator.dart';
+import 'package:mobistory/src/presentation/cubits/event_details/event_details_cubit.dart';
 import 'package:mobistory/src/presentation/cubits/events/events_cubit.dart';
 import 'package:mobistory/src/presentation/cubits/favorite_events/favorite_events_cubit.dart';
 import 'package:mobistory/src/presentation/cubits/today_events/today_events_cubit.dart';
@@ -41,6 +43,12 @@ class MyApp extends StatelessWidget {
               create: (context) => TodayEventsCubit(
                 locator<DatabaseRepository>(),
               )..loadTodayEvents()
+          ),
+          BlocProvider(
+              create: (context) => EventDetailsCubit(
+                locator<ApiRepository>(),
+                locator<DatabaseRepository>(),
+              )
           )
         ],
         child: MaterialApp.router(
