@@ -18,18 +18,40 @@ class EventsScreen extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    useEffect(() {
+      context.read<EventsCubit>().loadEvents();
+      return () {};
+    }, []);
+
     return DefaultTabController(
       length: 2, // This is the number of tabs.
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Events'),
-            bottom: const TabBar(
-              tabs: [
+          bottom: const TabBar(
+            tabs: [
                 Tab(text: 'List'),
                 Tab(text: 'Timeline'),
               ],
-              labelStyle: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
+            labelStyle: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
+          ),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  showSearch(
+                      context: context,
+                      delegate: CustomSearchDelegate(),
+                      useRootNavigator: true,
+                  );
+                },
+                icon: const Icon(Icons.search_outlined)
             ),
+            IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.more_vert_outlined)
+            )
+          ],
         ),
         body: BlocBuilder<EventsCubit, EventsState>(
             builder: (context, state) => TabBarView(
@@ -142,10 +164,10 @@ class EventsScreen extends HookWidget {
                   ),
                   if (event.startTime != DateTime.parse("0001-01-01"))
                     Text(
-                      "${event.startTime.year} - ${event.endTime.year}",
+                      "${event.startTime.year}/${event.startTime.month} - ${event.endTime.year}/${event.endTime.month}",
                       style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                  if (event.pointInTime != DateTime.parse("0001-01-01"))
+                    )
+                  else
                     Text(
                       "${event.pointInTime.year}/${event.pointInTime.month}/${event.pointInTime.day}",
                       style: Theme.of(context).textTheme.bodySmall,
@@ -172,5 +194,40 @@ class EventsScreen extends HookWidget {
       physics: const ClampingScrollPhysics(),
       position: TimelinePosition.Center,
     );
+  }
+}
+
+class CustomSearchDelegate extends SearchDelegate {
+  @override
+  List<Widget>? buildActions(BuildContext context) {
+    return [
+      if (query.characters.isNotEmpty)
+        IconButton(
+            onPressed: () {
+              query = '';
+            },
+            icon: const Icon(Icons.clear_outlined)
+        )
+    ];
+  }
+
+  @override
+  Widget? buildLeading(BuildContext context) {
+    return IconButton(
+        onPressed: () {
+          close(context, null);
+        },
+        icon: const Icon(Icons.arrow_back_outlined)
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return Column();
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    return Column();
   }
 }
