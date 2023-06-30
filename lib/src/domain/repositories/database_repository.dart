@@ -13,5 +13,7 @@ abstract class DatabaseRepository {
 
   Future<List<Event>> getTodayEvents();
 
+  Future<List<Event>> getNearestEvents(Double latitude, Double longitude, Double radius);
+
   Stream<int?> getNumberOfEvents();
 }
