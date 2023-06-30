@@ -55,6 +55,7 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
   @override
   Future<List<Event>> getNearestEvents(Double latitude, Double longitude, Double radius) {
     // use this implementation : https://pixelcarrot.com/listing-nearest-locations-from-sqlite-of-a-mobile-app
+    // another link for it [in PHP] : https://ourcodeworld.com/articles/read/1019/how-to-find-nearest-locations-from-a-collection-of-coordinates-latitude-and-longitude-with-php-mysql
     final curCosLat = cos(latitude * pi / 180.0);
     final curSinLat = sin(latitude * pi / 180.0);
     final curCosLng = cos(longitude * pi / 180.0);
