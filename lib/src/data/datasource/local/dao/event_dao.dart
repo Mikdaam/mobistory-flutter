@@ -22,7 +22,7 @@ abstract class EventDao {
   Future<List<Event>> getTodayEvents(DateTime date);
 
   @Query("SELECT * FROM (SELECT * FROM events WHERE latitude IS NOT NULL AND longitude IS NOT NULL) WHERE :cosDistance > :cosRadius ORDER BY :cosDistance DESC")
-  Future<List<Event>> getEventNearestEN(Double latitude, Double longitude, Double cosRadius, Double cosDistance)
+  Future<List<Event>> getEventNearest(double cosRadius, double cosDistance);
 
   @Query('SELECT COUNT(*) FROM event')
   Stream<int?> getNumberOfEvents();

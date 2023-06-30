@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:mobistory/src/data/datasource/local/dao/event_dao.dart';
 import 'package:mobistory/src/domain/model/event.dart';
 import 'package:mobistory/src/domain/repositories/database_repository.dart';
@@ -53,7 +55,7 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
   }
 
   @override
-  Future<List<Event>> getNearestEvents(Double latitude, Double longitude, Double radius) {
+  Future<List<Event>> getNearestEvents(double latitude, double longitude, double radius) {
     // use this implementation : https://pixelcarrot.com/listing-nearest-locations-from-sqlite-of-a-mobile-app
     // another link for it [in PHP] : https://ourcodeworld.com/articles/read/1019/how-to-find-nearest-locations-from-a-collection-of-coordinates-latitude-and-longitude-with-php-mysql
     final curCosLat = cos(latitude * pi / 180.0);
@@ -63,7 +65,7 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
     final cosRadius = cos(radius / 6371000.0);
     final cosDistance = "$curSinLat * sin_lat + $curCosLat * cos_lat * (cos_lon * $curCosLng + sin_lon * $curSinLng)";
 
-    return _eventDao.getNearestEvents(latitude, longitude, cosRadius, cosDistance);
+    return _eventDao.getNearestEvents(cosRadius, cosDistance);
   }
 
   @override

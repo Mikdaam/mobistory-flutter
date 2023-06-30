@@ -13,7 +13,7 @@ abstract class DatabaseRepository {
 
   Future<List<Event>> getTodayEvents();
 
-  Future<List<Event>> getNearestEvents(Double latitude, Double longitude, Double radius);
+  Future<List<Event>> getNearestEvents(double latitude, double longitude, double radius);
 
   Stream<int?> getNumberOfEvents();
 }
