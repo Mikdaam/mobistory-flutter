@@ -63,7 +63,7 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
     final curCosLng = cos(longitude * pi / 180.0);
     final curSinLng = sin(longitude * pi / 180.0);
     final cosRadius = cos(radius / 6371000.0);
-    final cosDistance = "$curSinLat * sin_lat + $curCosLat * cos_lat * (cos_lon * $curCosLng + sin_lon * $curSinLng)";
+    final cosDistance = "$curSinLat * sinLatitude + $curCosLat * cosLatitude * (cosLongitude * $curCosLng + sinLongitude * $curSinLng)";
 
     return _eventDao.getNearestEvents(cosRadius, cosDistance);
   }

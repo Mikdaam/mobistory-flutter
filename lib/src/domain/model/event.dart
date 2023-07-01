@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:floor/floor.dart';
 
 @Entity(tableName: 'event')
@@ -17,6 +19,10 @@ class Event {
   final DateTime pointInTime;
   final double? latitude;
   final double? longitude;
+  final double? sinLatitude;
+  final double? cosLatitude;
+  final double? sinLongitude;
+  final double? cosLongitude;
   final String? image;
 
   Event({
@@ -35,7 +41,10 @@ class Event {
     required this.latitude,
     required this.longitude,
     required this.image,
-  });
+  })  : sinLatitude = latitude != null ? sin(latitude * pi / 180) : null,
+        cosLatitude = latitude != null ? cos(latitude * pi / 180) : null,
+        sinLongitude = longitude != null ? sin(longitude * pi / 180) : null,
+        cosLongitude = longitude != null ? cos(longitude * pi / 180) : null;
 
   copyWith({
     int? id,
