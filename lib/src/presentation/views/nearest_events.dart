@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:mobistory/src/domain/model/event.dart';
 import 'package:mobistory/src/presentation/cubits/events/events_cubit.dart';
 import 'package:mobistory/src/presentation/cubits/favorite_events/favorite_events_cubit.dart';
+import 'package:mobistory/src/presentation/cubits/nearest_events/nearest_events_cubit.dart';
 import 'package:mobistory/src/presentation/widgets/event_list_item.dart';
 
 class NearestEventsScreen extends HookWidget {
@@ -13,11 +14,11 @@ class NearestEventsScreen extends HookWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Nearest Events')),
-      body: BlocBuilder<FavoritesCubit, FavoritesState>(
+      body: BlocBuilder<NearestEventsCubit, NearestEventsState>(
         builder: (context, state) {
-          if (state is FavoritesLoading) {
+          if (state is NearestEventsLoading) {
             return _buildLoading();
-          } else if (state is FavoritesLoaded) {
+          } else if (state is NearestEventsLoaded) {
             return _buildLoaded(state.events);
           } else {
             return Container();
@@ -39,10 +40,7 @@ class NearestEventsScreen extends HookWidget {
         return EventListItem(
           event: event,
           onItemClick: (event) {},
-          onFavoriteClick: (event) {
-            context.read<FavoritesCubit>().removeEventFromFavorites(event);
-            context.read<EventsCubit>().loadEvents();
-          },
+          onFavoriteClick: (event) {},
         );
       },
     );

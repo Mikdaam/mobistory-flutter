@@ -4,6 +4,7 @@ import 'package:mobistory/main.dart';
 import 'package:mobistory/src/presentation/views/event_details.dart';
 import 'package:mobistory/src/presentation/views/events.dart';
 import 'package:mobistory/src/presentation/views/favorites_events.dart';
+import 'package:mobistory/src/presentation/views/nearest_events.dart';
 import 'package:mobistory/src/presentation/views/today_events.dart';
 
 @MaterialAutoRouter(
@@ -38,6 +39,15 @@ import 'package:mobistory/src/presentation/views/today_events.dart';
           page: EmptyRouterPage,
           children: [
             AutoRoute(path: '', page: FavoritesEventsScreen),
+            RedirectRoute(path: '*', redirectTo: ''),
+          ],
+        ),
+        AutoRoute(
+          path: "nearest",
+          name: "NearestRouter",
+          page: EmptyRouterPage,
+          children: [
+            AutoRoute(path: '', page: NearestEventsScreen),
             RedirectRoute(path: '*', redirectTo: ''),
           ],
         ),

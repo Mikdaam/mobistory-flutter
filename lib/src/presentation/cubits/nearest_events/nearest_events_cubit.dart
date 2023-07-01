@@ -15,7 +15,7 @@ class NearestEventsCubit extends Cubit<NearestEventsState> {
   }
 
   Future<NearestEventsState> _loadNearestEvents() async {
-    final events = await _databaseRepository.getNearestEvents(48.8584, 2.2945, 100);
+    final events = await _databaseRepository.getNearestEvents(48.8584, 2.2945, 10);
     return NearestEventsLoaded(events: events);
   }
 }

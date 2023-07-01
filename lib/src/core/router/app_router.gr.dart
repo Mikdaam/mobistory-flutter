@@ -11,48 +11,55 @@
 // ignore_for_file: type=lint
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:auto_route/auto_route.dart' as _i7;
+import 'package:auto_route/auto_route.dart' as _i8;
 import 'package:auto_route/empty_router_widgets.dart' as _i2;
-import 'package:flutter/material.dart' as _i8;
+import 'package:flutter/material.dart' as _i9;
 
 import '../../../main.dart' as _i1;
 import '../../presentation/views/event_details.dart' as _i4;
 import '../../presentation/views/events.dart' as _i3;
 import '../../presentation/views/favorites_events.dart' as _i6;
+import '../../presentation/views/nearest_events.dart' as _i7;
 import '../../presentation/views/today_events.dart' as _i5;
 
-class AppRouter extends _i7.RootStackRouter {
-  AppRouter([_i8.GlobalKey<_i8.NavigatorState>? navigatorKey])
+class AppRouter extends _i8.RootStackRouter {
+  AppRouter([_i9.GlobalKey<_i9.NavigatorState>? navigatorKey])
       : super(navigatorKey);
 
   @override
-  final Map<String, _i7.PageFactory> pagesMap = {
+  final Map<String, _i8.PageFactory> pagesMap = {
     MainRoute.name: (routeData) {
-      return _i7.MaterialPageX<dynamic>(
+      return _i8.MaterialPageX<dynamic>(
         routeData: routeData,
         child: const _i1.MainScreen(),
       );
     },
     EventsRouter.name: (routeData) {
-      return _i7.MaterialPageX<dynamic>(
+      return _i8.MaterialPageX<dynamic>(
         routeData: routeData,
         child: const _i2.EmptyRouterPage(),
       );
     },
     TodayRouter.name: (routeData) {
-      return _i7.MaterialPageX<dynamic>(
+      return _i8.MaterialPageX<dynamic>(
         routeData: routeData,
         child: const _i2.EmptyRouterPage(),
       );
     },
     FavoritesRouter.name: (routeData) {
-      return _i7.MaterialPageX<dynamic>(
+      return _i8.MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: const _i2.EmptyRouterPage(),
+      );
+    },
+    NearestRouter.name: (routeData) {
+      return _i8.MaterialPageX<dynamic>(
         routeData: routeData,
         child: const _i2.EmptyRouterPage(),
       );
     },
     EventsRoute.name: (routeData) {
-      return _i7.MaterialPageX<dynamic>(
+      return _i8.MaterialPageX<dynamic>(
         routeData: routeData,
         child: const _i3.EventsScreen(),
       );
@@ -62,7 +69,7 @@ class AppRouter extends _i7.RootStackRouter {
       final args = routeData.argsAs<EventDetailsRouteArgs>(
           orElse: () =>
               EventDetailsRouteArgs(eventId: pathParams.getInt('eventId')));
-      return _i7.MaterialPageX<dynamic>(
+      return _i8.MaterialPageX<dynamic>(
         routeData: routeData,
         child: _i4.EventDetailsScreen(
           key: args.key,
@@ -71,41 +78,47 @@ class AppRouter extends _i7.RootStackRouter {
       );
     },
     TodayEventsRoute.name: (routeData) {
-      return _i7.MaterialPageX<dynamic>(
+      return _i8.MaterialPageX<dynamic>(
         routeData: routeData,
         child: const _i5.TodayEventsScreen(),
       );
     },
     FavoritesEventsRoute.name: (routeData) {
-      return _i7.MaterialPageX<dynamic>(
+      return _i8.MaterialPageX<dynamic>(
         routeData: routeData,
         child: const _i6.FavoritesEventsScreen(),
+      );
+    },
+    NearestEventsRoute.name: (routeData) {
+      return _i8.MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: const _i7.NearestEventsScreen(),
       );
     },
   };
 
   @override
-  List<_i7.RouteConfig> get routes => [
-        _i7.RouteConfig(
+  List<_i8.RouteConfig> get routes => [
+        _i8.RouteConfig(
           MainRoute.name,
           path: '/',
           children: [
-            _i7.RouteConfig(
+            _i8.RouteConfig(
               EventsRouter.name,
               path: 'events',
               parent: MainRoute.name,
               children: [
-                _i7.RouteConfig(
+                _i8.RouteConfig(
                   EventsRoute.name,
                   path: '',
                   parent: EventsRouter.name,
                 ),
-                _i7.RouteConfig(
+                _i8.RouteConfig(
                   EventDetailsRoute.name,
                   path: ':eventId',
                   parent: EventsRouter.name,
                 ),
-                _i7.RouteConfig(
+                _i8.RouteConfig(
                   '*#redirect',
                   path: '*',
                   parent: EventsRouter.name,
@@ -114,17 +127,17 @@ class AppRouter extends _i7.RootStackRouter {
                 ),
               ],
             ),
-            _i7.RouteConfig(
+            _i8.RouteConfig(
               TodayRouter.name,
               path: 'today',
               parent: MainRoute.name,
               children: [
-                _i7.RouteConfig(
+                _i8.RouteConfig(
                   TodayEventsRoute.name,
                   path: '',
                   parent: TodayRouter.name,
                 ),
-                _i7.RouteConfig(
+                _i8.RouteConfig(
                   '*#redirect',
                   path: '*',
                   parent: TodayRouter.name,
@@ -133,20 +146,39 @@ class AppRouter extends _i7.RootStackRouter {
                 ),
               ],
             ),
-            _i7.RouteConfig(
+            _i8.RouteConfig(
               FavoritesRouter.name,
               path: 'favorites',
               parent: MainRoute.name,
               children: [
-                _i7.RouteConfig(
+                _i8.RouteConfig(
                   FavoritesEventsRoute.name,
                   path: '',
                   parent: FavoritesRouter.name,
                 ),
-                _i7.RouteConfig(
+                _i8.RouteConfig(
                   '*#redirect',
                   path: '*',
                   parent: FavoritesRouter.name,
+                  redirectTo: '',
+                  fullMatch: true,
+                ),
+              ],
+            ),
+            _i8.RouteConfig(
+              NearestRouter.name,
+              path: 'nearest',
+              parent: MainRoute.name,
+              children: [
+                _i8.RouteConfig(
+                  NearestEventsRoute.name,
+                  path: '',
+                  parent: NearestRouter.name,
+                ),
+                _i8.RouteConfig(
+                  '*#redirect',
+                  path: '*',
+                  parent: NearestRouter.name,
                   redirectTo: '',
                   fullMatch: true,
                 ),
@@ -159,8 +191,8 @@ class AppRouter extends _i7.RootStackRouter {
 
 /// generated route for
 /// [_i1.MainScreen]
-class MainRoute extends _i7.PageRouteInfo<void> {
-  const MainRoute({List<_i7.PageRouteInfo>? children})
+class MainRoute extends _i8.PageRouteInfo<void> {
+  const MainRoute({List<_i8.PageRouteInfo>? children})
       : super(
           MainRoute.name,
           path: '/',
@@ -172,8 +204,8 @@ class MainRoute extends _i7.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i2.EmptyRouterPage]
-class EventsRouter extends _i7.PageRouteInfo<void> {
-  const EventsRouter({List<_i7.PageRouteInfo>? children})
+class EventsRouter extends _i8.PageRouteInfo<void> {
+  const EventsRouter({List<_i8.PageRouteInfo>? children})
       : super(
           EventsRouter.name,
           path: 'events',
@@ -185,8 +217,8 @@ class EventsRouter extends _i7.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i2.EmptyRouterPage]
-class TodayRouter extends _i7.PageRouteInfo<void> {
-  const TodayRouter({List<_i7.PageRouteInfo>? children})
+class TodayRouter extends _i8.PageRouteInfo<void> {
+  const TodayRouter({List<_i8.PageRouteInfo>? children})
       : super(
           TodayRouter.name,
           path: 'today',
@@ -198,8 +230,8 @@ class TodayRouter extends _i7.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i2.EmptyRouterPage]
-class FavoritesRouter extends _i7.PageRouteInfo<void> {
-  const FavoritesRouter({List<_i7.PageRouteInfo>? children})
+class FavoritesRouter extends _i8.PageRouteInfo<void> {
+  const FavoritesRouter({List<_i8.PageRouteInfo>? children})
       : super(
           FavoritesRouter.name,
           path: 'favorites',
@@ -210,8 +242,21 @@ class FavoritesRouter extends _i7.PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [_i2.EmptyRouterPage]
+class NearestRouter extends _i8.PageRouteInfo<void> {
+  const NearestRouter({List<_i8.PageRouteInfo>? children})
+      : super(
+          NearestRouter.name,
+          path: 'nearest',
+          initialChildren: children,
+        );
+
+  static const String name = 'NearestRouter';
+}
+
+/// generated route for
 /// [_i3.EventsScreen]
-class EventsRoute extends _i7.PageRouteInfo<void> {
+class EventsRoute extends _i8.PageRouteInfo<void> {
   const EventsRoute()
       : super(
           EventsRoute.name,
@@ -223,9 +268,9 @@ class EventsRoute extends _i7.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i4.EventDetailsScreen]
-class EventDetailsRoute extends _i7.PageRouteInfo<EventDetailsRouteArgs> {
+class EventDetailsRoute extends _i8.PageRouteInfo<EventDetailsRouteArgs> {
   EventDetailsRoute({
-    _i8.Key? key,
+    _i9.Key? key,
     required int eventId,
   }) : super(
           EventDetailsRoute.name,
@@ -246,7 +291,7 @@ class EventDetailsRouteArgs {
     required this.eventId,
   });
 
-  final _i8.Key? key;
+  final _i9.Key? key;
 
   final int eventId;
 
@@ -258,7 +303,7 @@ class EventDetailsRouteArgs {
 
 /// generated route for
 /// [_i5.TodayEventsScreen]
-class TodayEventsRoute extends _i7.PageRouteInfo<void> {
+class TodayEventsRoute extends _i8.PageRouteInfo<void> {
   const TodayEventsRoute()
       : super(
           TodayEventsRoute.name,
@@ -270,7 +315,7 @@ class TodayEventsRoute extends _i7.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i6.FavoritesEventsScreen]
-class FavoritesEventsRoute extends _i7.PageRouteInfo<void> {
+class FavoritesEventsRoute extends _i8.PageRouteInfo<void> {
   const FavoritesEventsRoute()
       : super(
           FavoritesEventsRoute.name,
@@ -278,4 +323,16 @@ class FavoritesEventsRoute extends _i7.PageRouteInfo<void> {
         );
 
   static const String name = 'FavoritesEventsRoute';
+}
+
+/// generated route for
+/// [_i7.NearestEventsScreen]
+class NearestEventsRoute extends _i8.PageRouteInfo<void> {
+  const NearestEventsRoute()
+      : super(
+          NearestEventsRoute.name,
+          path: '',
+        );
+
+  static const String name = 'NearestEventsRoute';
 }

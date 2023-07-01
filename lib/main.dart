@@ -9,6 +9,7 @@ import 'package:mobistory/src/locator.dart';
 import 'package:mobistory/src/presentation/cubits/event_details/event_details_cubit.dart';
 import 'package:mobistory/src/presentation/cubits/events/events_cubit.dart';
 import 'package:mobistory/src/presentation/cubits/favorite_events/favorite_events_cubit.dart';
+import 'package:mobistory/src/presentation/cubits/nearest_events/nearest_events_cubit.dart';
 import 'package:mobistory/src/presentation/cubits/today_events/today_events_cubit.dart';
 
 Future<void> main() async {
@@ -49,6 +50,11 @@ class MyApp extends StatelessWidget {
                 locator<ApiRepository>(),
                 locator<DatabaseRepository>(),
               )
+          ),
+          BlocProvider(
+              create: (context) => NearestEventsCubit(
+                  locator<DatabaseRepository>(),
+                )..loadNearestEvents()
           )
         ],
         child: MaterialApp.router(
@@ -77,6 +83,7 @@ class MainScreen extends HookWidget {
         EventsRouter(),
         TodayRouter(),
         FavoritesRouter(),
+        NearestRouter(),
       ],
       bottomNavigationBuilder: (_, tabsRouter) {
         return BottomNavigationBar(
@@ -100,12 +107,12 @@ class MainScreen extends HookWidget {
                 label: 'Favorites'
             ),
             BottomNavigationBarItem(
-                icon: Icon(Icons.quiz_outlined),
-                label: 'Quiz'
+                icon: Icon(Icons.map_sharp),
+                label: 'Nearest Events'
             ),
             BottomNavigationBarItem(
-                icon: Icon(Icons.settings_outlined),
-                label: 'Settings'
+                icon: Icon(Icons.quiz_outlined),
+                label: 'Quiz'
             ),
           ],
         );

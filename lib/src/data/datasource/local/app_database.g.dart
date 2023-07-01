@@ -242,7 +242,7 @@ class _$EventDao extends EventDao {
     String cosDistance,
   ) async {
     return _queryAdapter.queryList(
-        'SELECT * FROM (SELECT * FROM events WHERE latitude IS NOT NULL) WHERE ?2 > ?1 ORDER BY ?2 DESC',
+        'SELECT * FROM event WHERE (latitude IS NOT NULL) AND (?2 > ?1) ORDER BY ?2 DESC',
         mapper: (Map<String, Object?> row) => Event(id: row['id'] as int, label: row['label'] as String?, aliases: row['aliases'] as String?, description: row['description'] as String?, wikipedia: row['wikipedia'] as String?, popularityEN: row['popularityEN'] as int, popularityFR: row['popularityFR'] as int, sourceId: row['sourceId'] as int, isFavorite: (row['isFavorite'] as int) != 0, startTime: _dateTimeConverter.decode(row['startTime'] as int), endTime: _dateTimeConverter.decode(row['endTime'] as int), pointInTime: _dateTimeConverter.decode(row['pointInTime'] as int), latitude: row['latitude'] as double?, longitude: row['longitude'] as double?, image: row['image'] as String?),
         arguments: [cosRadius, cosDistance]);
   }
