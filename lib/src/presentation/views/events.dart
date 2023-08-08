@@ -42,14 +42,26 @@ class EventsScreen extends HookWidget {
                   showSearch(
                       context: context,
                       delegate: CustomSearchDelegate(),
-                      useRootNavigator: true,
                   );
                 },
                 icon: const Icon(Icons.search_outlined)
             ),
-            IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.more_vert_outlined)
+            PopupMenuButton(
+                itemBuilder: (context) =>
+                    {"Refresh", "Settings", "About"}.map((e) => PopupMenuItem<String>(value: e, child: Text(e))).toList(),
+                onSelected: (value) {
+                  switch (value) {
+                    case "Refresh":
+                      context.read<EventsCubit>().loadEvents();
+                      break;
+                    case "Settings":
+                      context.router.push(const SettingsRoute());
+                      break;
+                    case "About":
+                      context.router.push(const AboutRoute());
+                      break;
+                  }
+                }
             )
           ],
         ),

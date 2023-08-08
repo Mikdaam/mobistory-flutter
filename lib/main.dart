@@ -77,6 +77,9 @@ class MainScreen extends HookWidget {
         EventsRouter(),
         TodayRouter(),
         FavoritesRouter(),
+        QuizRouter(),
+        SettingsRouter(),
+        //AboutRouter()
       ],
       bottomNavigationBuilder: (_, tabsRouter) {
         return BottomNavigationBar(
