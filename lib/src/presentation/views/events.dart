@@ -83,23 +83,6 @@ class EventsScreen extends HookWidget {
     return const Center(child: CircularProgressIndicator());
   }
 
-  Widget _buildList(List<Event> events) {
-    return ListView.builder(
-      itemCount: events.length,
-      itemBuilder: (context, index) {
-        final event = events[index];
-        return EventListItem(
-          event: event,
-          onItemClick: (event) => context.router.push(EventDetailsRoute(eventId: event.id)),
-          onFavoriteClick: (event) {
-            context.read<FavoritesCubit>().toggleFavorite(event);
-            context.read<EventsCubit>().loadEvents();
-          },
-        );
-      },
-    );
-  }
-
   _buildEventsTimeline(BuildContext context, EventsState state) {
     if (state is EventsLoading) {
       return _buildLoading();
@@ -197,6 +180,23 @@ class EventsScreen extends HookWidget {
   }
 }
 
+Widget _buildList(List<Event> events) {
+  return ListView.builder(
+    itemCount: events.length,
+    itemBuilder: (context, index) {
+      final event = events[index];
+      return EventListItem(
+        event: event,
+        onItemClick: (event) => context.router.push(EventDetailsRoute(eventId: event.id)),
+        onFavoriteClick: (event) {
+          context.read<FavoritesCubit>().toggleFavorite(event);
+          context.read<EventsCubit>().loadEvents();
+        },
+      );
+    },
+  );
+}
+
 class CustomSearchDelegate extends SearchDelegate {
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -209,6 +209,58 @@ class CustomSearchDelegate extends SearchDelegate {
             icon: const Icon(Icons.clear_outlined)
         )
     ];
+  }
+
+  @override
+  ThemeData appBarTheme(BuildContext context) {
+    return ThemeData(
+      textTheme: const TextTheme(
+        titleLarge: TextStyle(
+          color: Colors.white,
+          fontSize: 12.0,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: Colors.blue,
+      ),
+      inputDecorationTheme: const InputDecorationTheme(
+        hintStyle: TextStyle(
+          color: Colors.white,
+          fontSize: 14.0,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    );
+  }
+
+  @override
+  PreferredSizeWidget buildBottom(BuildContext context) {
+    return PreferredSize(
+      preferredSize: const Size.fromHeight(85.0),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+        decoration: const BoxDecoration(
+          border: Border(
+            top: BorderSide(
+              color: Colors.white70,
+              width: 1.0,
+            ),
+          ),
+        ),
+        child: Wrap(
+          spacing: 5.0,
+          children: const [
+            Chip(label: Text("Title"), avatar: Icon(Icons.title), backgroundColor: Colors.white70),
+            Chip(label: Text('Start Date'), avatar: Icon(Icons.calendar_today), backgroundColor: Colors.white70),
+            Chip(label: Text('End Date'), avatar: Icon(Icons.calendar_today), backgroundColor: Colors.white70),
+            Chip(label: Text('Location'), avatar: Icon(Icons.location_on), backgroundColor: Colors.white70),
+            Chip(label: Text('Tag'), avatar: Icon(Icons.tag), backgroundColor: Colors.white70),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -228,6 +280,9 @@ class CustomSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return Column();
+    return BlocBuilder<EventsCubit, EventsState>(
+        // builder: (context, state) => _buildList(state.events.where((event) => event.label!.toLowerCase().contains(query.toLowerCase())).toList())
+        builder: (context, state) => _buildList(state.events)
+    );
   }
 }
