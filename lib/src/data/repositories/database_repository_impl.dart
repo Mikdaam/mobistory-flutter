@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:logger/logger.dart';
 import 'package:mobistory/src/data/datasource/local/dao/event_dao.dart';
 import 'package:mobistory/src/domain/model/event.dart';
 import 'package:mobistory/src/domain/repositories/database_repository.dart';
@@ -62,8 +63,12 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
     final curSinLat = sin(latitude * pi / 180.0);
     final curCosLng = cos(longitude * pi / 180.0);
     final curSinLng = sin(longitude * pi / 180.0);
-    final cosRadius = cos(radius / 6371000.0);
-    final cosDistance = "$curSinLat * sinLatitude + $curCosLat * cosLatitude * (cosLongitude * $curCosLng + sinLongitude * $curSinLng)";
+    final cosRadius = cos(radius / 6371.0); // 6371.0 is the radius of the Earth in km, so radius is in km
+    final cosDistance = "($curSinLat * sinLatitude + $curCosLat * cosLatitude * (cosLongitude * $curCosLng + sinLongitude * $curSinLng))";
+
+    Logger logger = Logger();
+    logger.d("cosRadius : $cosRadius");
+    logger.d("cosDistance : $cosDistance");
 
     return _eventDao.getNearestEvents(cosRadius, cosDistance);
   }
