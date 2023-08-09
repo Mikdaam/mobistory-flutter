@@ -78,9 +78,7 @@ class EventDetailsScreen extends HookWidget {
                 ),
                 IconButton(
                   onPressed: () {
-                    context
-                        .read<FavoritesCubit>()
-                        .toggleFavorite(state.eventDetails!.event);
+                    context.read<FavoritesCubit>().toggleFavorite(state.eventDetails!.event);
                     context.read<EventsCubit>().loadEvents();
                   },
                   icon: Icon(

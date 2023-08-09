@@ -9,6 +9,9 @@ import 'package:mobistory/src/core/router/app_router.gr.dart';
 import 'package:mobistory/src/domain/model/event.dart';
 import 'package:mobistory/src/presentation/cubits/events/events_cubit.dart';
 import 'package:mobistory/src/presentation/cubits/favorite_events/favorite_events_cubit.dart';
+import 'package:mobistory/src/presentation/views/about.dart';
+import 'package:mobistory/src/presentation/views/event_details.dart';
+import 'package:mobistory/src/presentation/views/settings.dart';
 import 'package:mobistory/src/presentation/widgets/event_list_item.dart';
 import 'package:timeline_list/timeline.dart';
 import 'package:timeline_list/timeline_model.dart';
@@ -55,10 +58,14 @@ class EventsScreen extends HookWidget {
                       context.read<EventsCubit>().loadEvents();
                       break;
                     case "Settings":
-                      context.router.push(const SettingsRoute());
+                      Navigator.of(context, rootNavigator: true).push(
+                          MaterialPageRoute(builder: (context) => const SettingsScreen())
+                      );
                       break;
                     case "About":
-                      context.router.push(const AboutRoute());
+                      Navigator.of(context, rootNavigator: true).push(
+                          MaterialPageRoute(builder: (context) => const AboutScreen())
+                      );
                       break;
                   }
                 }
@@ -199,7 +206,11 @@ Widget _buildList(List<Event> events) {
       final event = events[index];
       return EventListItem(
         event: event,
-        onItemClick: (event) => context.router.push(EventDetailsRoute(eventId: event.id)),
+        onItemClick: (event) {
+          Navigator.of(context, rootNavigator: true).push(
+            MaterialPageRoute(builder: (context) => EventDetailsScreen(eventId: event.id)),
+          );
+        },
         onFavoriteClick: (event) {
           context.read<FavoritesCubit>().toggleFavorite(event);
           context.read<EventsCubit>().loadEvents();
