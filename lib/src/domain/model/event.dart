@@ -14,7 +14,6 @@ class Event {
   final String? wikipediaFR;
   final int popularityEN;
   final int popularityFR;
-  final int sourceId;
   final bool isFavorite;
   final DateTime startTime;
   final DateTime endTime;
@@ -35,7 +34,6 @@ class Event {
     required this.wikipediaFR,
     required this.popularityEN,
     required this.popularityFR,
-    required this.sourceId,
     this.isFavorite = false,
     required this.startTime,
     required this.endTime,
@@ -57,7 +55,6 @@ class Event {
     String? wikipediaFR,
     int? popularityEN,
     int? popularityFR,
-    int? sourceId,
     bool? isFavorite,
     DateTime? startTime,
     DateTime? endTime,
@@ -78,7 +75,6 @@ class Event {
       wikipediaFR: wikipediaFR ?? this.wikipediaFR,
       popularityEN: popularityEN ?? this.popularityEN,
       popularityFR: popularityFR ?? this.popularityFR,
-      sourceId: sourceId ?? this.sourceId,
       isFavorite: isFavorite ?? this.isFavorite,
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
@@ -231,7 +227,6 @@ class Event {
         wikipediaFR: wikipediaFR ?? "",
         popularityEN: popularity['en'] ?? 0,
         popularityFR: popularity['fr'] ?? 0,
-        sourceId: jsonDecode['sourceId'],
         startTime: startTime ?? DateTime.parse("0001-01-01"), // because can't store null datetime in database
         endTime: endTime ?? DateTime.parse("0001-01-01"),
         pointInTime: pointInTime ?? DateTime.parse("0001-01-01"),
@@ -266,6 +261,6 @@ class Event {
 
   @override
   String toString() {
-    return 'Event{id: $id, labelEN: $labelEN, labelFR: $labelFR, aliasesEN: $aliasesEN, aliasesFR: $aliasesFR, descriptionEN: $descriptionEN, descriptionFR: $descriptionFR, wikipediaEN: $wikipediaEN, wikipediaFR: $wikipediaFR, popularityEN: $popularityEN, popularityFR: $popularityFR, sourceId: $sourceId, isFavorite: $isFavorite, startTime: $startTime, endTime: $endTime, pointInTime: $pointInTime, latitude: $latitude, longitude: $longitude, image: $image}';
+    return 'Event{id: $id, labelEN: $labelEN, labelFR: $labelFR, aliasesEN: $aliasesEN, aliasesFR: $aliasesFR, descriptionEN: $descriptionEN, descriptionFR: $descriptionFR, wikipediaEN: $wikipediaEN, wikipediaFR: $wikipediaFR, popularityEN: $popularityEN, popularityFR: $popularityFR, isFavorite: $isFavorite, startTime: $startTime, endTime: $endTime, pointInTime: $pointInTime, latitude: $latitude, longitude: $longitude, image: $image}';
   }
 }

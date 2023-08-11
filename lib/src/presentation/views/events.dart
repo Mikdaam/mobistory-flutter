@@ -29,7 +29,7 @@ class EventsScreen extends HookWidget {
       length: 2, // This is the number of tabs.
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Events'),
+          title: const Text('Mobistory'),
           bottom: const TabBar(
             tabs: [
                 Tab(text: 'List'),
@@ -38,6 +38,11 @@ class EventsScreen extends HookWidget {
             labelStyle: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
           ),
           actions: [
+            IconButton(
+                onPressed: () {
+                },
+                icon: const Icon(Icons.sort_outlined)
+            ),
             IconButton(
                 onPressed: () {
                   showSearch(
