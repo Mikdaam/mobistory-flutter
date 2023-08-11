@@ -1,11 +1,9 @@
 import 'dart:math';
 
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:mobistory/src/core/router/app_router.gr.dart';
 import 'package:mobistory/src/domain/model/event.dart';
 import 'package:mobistory/src/presentation/cubits/events/events_cubit.dart';
 import 'package:mobistory/src/presentation/cubits/favorite_events/favorite_events_cubit.dart';
@@ -158,7 +156,7 @@ class EventsScreen extends HookWidget {
                     height: 8.0,
                   ),
                   Text(
-                    event.label!,
+                    event.labelEN!,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(

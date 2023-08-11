@@ -85,7 +85,7 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `event` (`id` INTEGER NOT NULL, `label` TEXT, `aliases` TEXT, `description` TEXT, `wikipedia` TEXT, `popularityEN` INTEGER NOT NULL, `popularityFR` INTEGER NOT NULL, `sourceId` INTEGER NOT NULL, `isFavorite` INTEGER NOT NULL, `startTime` INTEGER NOT NULL, `endTime` INTEGER NOT NULL, `pointInTime` INTEGER NOT NULL, `latitude` REAL, `longitude` REAL, `image` TEXT, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `event` (`id` INTEGER NOT NULL, `labelEN` TEXT, `labelFR` TEXT, `aliasesEN` TEXT, `aliasesFR` TEXT, `descriptionEN` TEXT, `descriptionFR` TEXT, `wikipediaEN` TEXT, `wikipediaFR` TEXT, `popularityEN` INTEGER NOT NULL, `popularityFR` INTEGER NOT NULL, `sourceId` INTEGER NOT NULL, `isFavorite` INTEGER NOT NULL, `startTime` INTEGER NOT NULL, `endTime` INTEGER NOT NULL, `pointInTime` INTEGER NOT NULL, `latitude` REAL, `longitude` REAL, `image` TEXT, PRIMARY KEY (`id`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -109,10 +109,14 @@ class _$EventDao extends EventDao {
             'event',
             (Event item) => <String, Object?>{
                   'id': item.id,
-                  'label': item.label,
-                  'aliases': item.aliases,
-                  'description': item.description,
-                  'wikipedia': item.wikipedia,
+                  'labelEN': item.labelEN,
+                  'labelFR': item.labelFR,
+                  'aliasesEN': item.aliasesEN,
+                  'aliasesFR': item.aliasesFR,
+                  'descriptionEN': item.descriptionEN,
+                  'descriptionFR': item.descriptionFR,
+                  'wikipediaEN': item.wikipediaEN,
+                  'wikipediaFR': item.wikipediaFR,
                   'popularityEN': item.popularityEN,
                   'popularityFR': item.popularityFR,
                   'sourceId': item.sourceId,
@@ -130,10 +134,14 @@ class _$EventDao extends EventDao {
             ['id'],
             (Event item) => <String, Object?>{
                   'id': item.id,
-                  'label': item.label,
-                  'aliases': item.aliases,
-                  'description': item.description,
-                  'wikipedia': item.wikipedia,
+                  'labelEN': item.labelEN,
+                  'labelFR': item.labelFR,
+                  'aliasesEN': item.aliasesEN,
+                  'aliasesFR': item.aliasesFR,
+                  'descriptionEN': item.descriptionEN,
+                  'descriptionFR': item.descriptionFR,
+                  'wikipediaEN': item.wikipediaEN,
+                  'wikipediaFR': item.wikipediaFR,
                   'popularityEN': item.popularityEN,
                   'popularityFR': item.popularityFR,
                   'sourceId': item.sourceId,
@@ -161,10 +169,14 @@ class _$EventDao extends EventDao {
     return _queryAdapter.queryList('SELECT * FROM event',
         mapper: (Map<String, Object?> row) => Event(
             id: row['id'] as int,
-            label: row['label'] as String?,
-            aliases: row['aliases'] as String?,
-            description: row['description'] as String?,
-            wikipedia: row['wikipedia'] as String?,
+            labelEN: row['labelEN'] as String?,
+            labelFR: row['labelFR'] as String?,
+            aliasesEN: row['aliasesEN'] as String?,
+            aliasesFR: row['aliasesFR'] as String?,
+            descriptionEN: row['descriptionEN'] as String?,
+            descriptionFR: row['descriptionFR'] as String?,
+            wikipediaEN: row['wikipediaEN'] as String?,
+            wikipediaFR: row['wikipediaFR'] as String?,
             popularityEN: row['popularityEN'] as int,
             popularityFR: row['popularityFR'] as int,
             sourceId: row['sourceId'] as int,
@@ -182,10 +194,14 @@ class _$EventDao extends EventDao {
     return _queryAdapter.query('SELECT * FROM event WHERE id = ?1',
         mapper: (Map<String, Object?> row) => Event(
             id: row['id'] as int,
-            label: row['label'] as String?,
-            aliases: row['aliases'] as String?,
-            description: row['description'] as String?,
-            wikipedia: row['wikipedia'] as String?,
+            labelEN: row['labelEN'] as String?,
+            labelFR: row['labelFR'] as String?,
+            aliasesEN: row['aliasesEN'] as String?,
+            aliasesFR: row['aliasesFR'] as String?,
+            descriptionEN: row['descriptionEN'] as String?,
+            descriptionFR: row['descriptionFR'] as String?,
+            wikipediaEN: row['wikipediaEN'] as String?,
+            wikipediaFR: row['wikipediaFR'] as String?,
             popularityEN: row['popularityEN'] as int,
             popularityFR: row['popularityFR'] as int,
             sourceId: row['sourceId'] as int,
@@ -204,10 +220,14 @@ class _$EventDao extends EventDao {
     return _queryAdapter.queryList('SELECT * FROM event WHERE isFavorite = 1',
         mapper: (Map<String, Object?> row) => Event(
             id: row['id'] as int,
-            label: row['label'] as String?,
-            aliases: row['aliases'] as String?,
-            description: row['description'] as String?,
-            wikipedia: row['wikipedia'] as String?,
+            labelEN: row['labelEN'] as String?,
+            labelFR: row['labelFR'] as String?,
+            aliasesEN: row['aliasesEN'] as String?,
+            aliasesFR: row['aliasesFR'] as String?,
+            descriptionEN: row['descriptionEN'] as String?,
+            descriptionFR: row['descriptionFR'] as String?,
+            wikipediaEN: row['wikipediaEN'] as String?,
+            wikipediaFR: row['wikipediaFR'] as String?,
             popularityEN: row['popularityEN'] as int,
             popularityFR: row['popularityFR'] as int,
             sourceId: row['sourceId'] as int,
@@ -224,7 +244,7 @@ class _$EventDao extends EventDao {
   Future<List<Event>> getTodayEvents(DateTime date) async {
     return _queryAdapter.queryList(
         'SELECT * FROM event WHERE startTime == ?1 OR endTime == ?1 OR pointInTime == ?1',
-        mapper: (Map<String, Object?> row) => Event(id: row['id'] as int, label: row['label'] as String?, aliases: row['aliases'] as String?, description: row['description'] as String?, wikipedia: row['wikipedia'] as String?, popularityEN: row['popularityEN'] as int, popularityFR: row['popularityFR'] as int, sourceId: row['sourceId'] as int, isFavorite: (row['isFavorite'] as int) != 0, startTime: _dateTimeConverter.decode(row['startTime'] as int), endTime: _dateTimeConverter.decode(row['endTime'] as int), pointInTime: _dateTimeConverter.decode(row['pointInTime'] as int), latitude: row['latitude'] as double?, longitude: row['longitude'] as double?, image: row['image'] as String?),
+        mapper: (Map<String, Object?> row) => Event(id: row['id'] as int, labelEN: row['labelEN'] as String?, labelFR: row['labelFR'] as String?, aliasesEN: row['aliasesEN'] as String?, aliasesFR: row['aliasesFR'] as String?, descriptionEN: row['descriptionEN'] as String?, descriptionFR: row['descriptionFR'] as String?, wikipediaEN: row['wikipediaEN'] as String?, wikipediaFR: row['wikipediaFR'] as String?, popularityEN: row['popularityEN'] as int, popularityFR: row['popularityFR'] as int, sourceId: row['sourceId'] as int, isFavorite: (row['isFavorite'] as int) != 0, startTime: _dateTimeConverter.decode(row['startTime'] as int), endTime: _dateTimeConverter.decode(row['endTime'] as int), pointInTime: _dateTimeConverter.decode(row['pointInTime'] as int), latitude: row['latitude'] as double?, longitude: row['longitude'] as double?, image: row['image'] as String?),
         arguments: [_dateTimeConverter.encode(date)]);
   }
 

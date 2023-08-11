@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:mobistory/src/presentation/cubits/event_details/event_details_cubit.dart';
 import 'package:mobistory/src/presentation/cubits/events/events_cubit.dart';
 import 'package:mobistory/src/presentation/cubits/favorite_events/favorite_events_cubit.dart';
+import 'package:mobistory/src/utils/extensions.dart';
 
 class EventDetailsScreen extends HookWidget {
   final int eventId;
@@ -69,7 +70,7 @@ class EventDetailsScreen extends HookWidget {
                 ),
                 Expanded(
                   child: Text(
-                    state.eventDetails!.event.label ?? '',
+                    state.eventDetails!.event.labelEN ?? '',
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -92,7 +93,7 @@ class EventDetailsScreen extends HookWidget {
             ),
             if (state.eventDetails?.event.image != null)
               Container(
-                padding: const EdgeInsets.all(5),
+                padding: const EdgeInsets.all(3),
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: Colors.grey[300],
@@ -119,7 +120,7 @@ class EventDetailsScreen extends HookWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              state.eventDetails?.event.description ?? '',
+              state.eventDetails?.event.descriptionEN?.capitalize() ?? '',
               style: const TextStyle(fontSize: 18),
             ),
           ],

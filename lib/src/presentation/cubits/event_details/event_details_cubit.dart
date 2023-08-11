@@ -20,7 +20,7 @@ class EventDetailsCubit extends Cubit<EventDetailsState> {
 
     emit(const EventDetailsStateLoading());
 
-    final response = await _apiRepository.getEventPageFromWikipedia(extractWikipediaTitle(event?.wikipedia ?? ""));
+    final response = await _apiRepository.getEventPageFromWikipedia(event?.wikipediaEN ?? "");
 
     if (response is Success) {
       final eventDetails = EventDetails(
@@ -33,10 +33,5 @@ class EventDetailsCubit extends Cubit<EventDetailsState> {
     } else if (response is Failed) {
       emit(EventDetailsStateFailed(error: response.error!));
     }
-  }
-
-  String extractWikipediaTitle(String wikipediaUrl) {
-    List<String> parts = wikipediaUrl.split("||");
-    return parts.length > 1 ? parts[1] : "";
   }
 }

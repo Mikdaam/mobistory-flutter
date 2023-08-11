@@ -4,10 +4,14 @@ import 'package:floor/floor.dart';
 class Event {
   @PrimaryKey()
   final int id;
-  final String? label;
-  final String? aliases;
-  final String? description;
-  final String? wikipedia;
+  final String? labelEN;
+  final String? labelFR;
+  final String? aliasesEN;
+  final String? aliasesFR;
+  final String? descriptionEN;
+  final String? descriptionFR;
+  final String? wikipediaEN;
+  final String? wikipediaFR;
   final int popularityEN;
   final int popularityFR;
   final int sourceId;
@@ -21,10 +25,14 @@ class Event {
 
   Event({
     required this.id,
-    required this.label,
-    required this.aliases,
-    required this.description,
-    required this.wikipedia,
+    required this.labelEN,
+    required this.labelFR,
+    required this.aliasesEN,
+    required this.aliasesFR,
+    required this.descriptionEN,
+    required this.descriptionFR,
+    required this.wikipediaEN,
+    required this.wikipediaFR,
     required this.popularityEN,
     required this.popularityFR,
     required this.sourceId,
@@ -39,10 +47,14 @@ class Event {
 
   copyWith({
     int? id,
-    String? label,
-    String? aliases,
-    String? description,
-    String? wikipedia,
+    String? labelEN,
+    String? labelFR,
+    String? aliasesEN,
+    String? aliasesFR,
+    String? descriptionEN,
+    String? descriptionFR,
+    String? wikipediaEN,
+    String? wikipediaFR,
     int? popularityEN,
     int? popularityFR,
     int? sourceId,
@@ -56,10 +68,14 @@ class Event {
   }) {
     return Event(
       id: id ?? this.id,
-      label: label ?? this.label,
-      aliases: aliases ?? this.aliases,
-      description: description ?? this.description,
-      wikipedia: wikipedia ?? this.wikipedia,
+      labelEN: labelEN ?? this.labelEN,
+      labelFR: labelFR ?? this.labelFR,
+      aliasesEN: aliasesEN ?? this.aliasesEN,
+      aliasesFR: aliasesFR ?? this.aliasesFR,
+      descriptionEN: descriptionEN ?? this.descriptionEN,
+      descriptionFR: descriptionFR ?? this.descriptionFR,
+      wikipediaEN: wikipediaEN ?? this.wikipediaEN,
+      wikipediaFR: wikipediaFR ?? this.wikipediaFR,
       popularityEN: popularityEN ?? this.popularityEN,
       popularityFR: popularityFR ?? this.popularityFR,
       sourceId: sourceId ?? this.sourceId,
@@ -76,6 +92,10 @@ class Event {
   static fromJson(jsonDecode) {
     final popularity = jsonDecode['popularity'] ?? {};
     final claims = jsonDecode['claims'] ?? [];
+    String label = jsonDecode['label'] ?? "";
+    String alias = jsonDecode['aliases'] ?? "";
+    String description = jsonDecode['description'] ?? "";
+    String wikipedia = jsonDecode['wikipedia'] ?? "";
 
     const imageId = 18;
     const coordinateId = 625;
@@ -83,11 +103,92 @@ class Event {
     const endTimeId = 582;
     const pointInTimeId = 585;
 
+    String? labelEN, labelFR;
+    String? aliasesEN, aliasesFR;
+    String? descriptionEN, descriptionFR;
+    String? wikipediaEN, wikipediaFR;
     DateTime? startTime;
     DateTime? endTime;
     DateTime? pointInTime;
     double? latitude, longitude;
     String? image;
+
+    if(label.isNotEmpty) {
+      final labels = label.split("||");
+
+      if(labels.length != 2) {
+        return;
+      }
+
+      for (var it in labels) {
+        switch (it.substring(0, 2)) {
+          case "en":
+            labelEN = it.substring(3);
+            break;
+          case "fr":
+            labelFR = it.substring(3);
+            break;
+        }
+      }
+    }
+
+    if(alias.isNotEmpty) {
+      final aliases = alias.split("||");
+
+      /*if(aliases.length != 2) {
+        return;
+      }*/
+
+      for (var it in aliases) {
+        switch (it.substring(0, 2)) {
+          case "en":
+            aliasesEN = it.substring(3);
+            break;
+          case "fr":
+            aliasesFR = it.substring(3);
+            break;
+        }
+      }
+    }
+
+    if(description.isNotEmpty) {
+      final descriptions = description.split("||");
+
+      /*if(descriptions.length != 2) {
+        return;
+      }*/
+
+      for (var it in descriptions) {
+        switch (it.substring(0, 2)) {
+          case "en":
+            descriptionEN = it.substring(3);
+            break;
+          case "fr":
+            descriptionFR = it.substring(3);
+            break;
+        }
+      }
+    }
+
+    if(wikipedia.isNotEmpty) {
+      final wikipedias = wikipedia.split("||");
+
+      if(wikipedias.length != 2) {
+        return;
+      }
+
+      for (var it in wikipedias) {
+        switch (it.substring(0, 2)) {
+          case "en":
+            wikipediaEN = it.substring(3);
+            break;
+          case "fr":
+            wikipediaFR = it.substring(3);
+            break;
+        }
+      }
+    }
+
 
     for (final claim in claims) {
       final claimId = claim['id'] as int;
@@ -120,10 +221,14 @@ class Event {
 
     return Event(
         id: jsonDecode['id'],
-        label: jsonDecode['label'],
-        aliases: jsonDecode['aliases'],
-        description: jsonDecode['description'],
-        wikipedia: jsonDecode['wikipedia'],
+        labelEN: labelEN ?? "",
+        labelFR: labelFR ?? "",
+        aliasesEN: aliasesEN ?? "",
+        aliasesFR: aliasesFR ?? "",
+        descriptionEN: descriptionEN ?? "",
+        descriptionFR: descriptionFR ?? "",
+        wikipediaEN: wikipediaEN ?? "",
+        wikipediaFR: wikipediaFR ?? "",
         popularityEN: popularity['en'] ?? 0,
         popularityFR: popularity['fr'] ?? 0,
         sourceId: jsonDecode['sourceId'],
@@ -161,6 +266,6 @@ class Event {
 
   @override
   String toString() {
-    return 'Event{id: $id, label: $label, aliases: $aliases, description: $description, wikipedia: $wikipedia, popularityEN: $popularityEN, popularityFR: $popularityFR, sourceId: $sourceId, isFavorite: $isFavorite, startTime: $startTime, endTime: $endTime, pointInTime: $pointInTime, latitude: $latitude, longitude: $longitude, image: $image}';
+    return 'Event{id: $id, labelEN: $labelEN, labelFR: $labelFR, aliasesEN: $aliasesEN, aliasesFR: $aliasesFR, descriptionEN: $descriptionEN, descriptionFR: $descriptionFR, wikipediaEN: $wikipediaEN, wikipediaFR: $wikipediaFR, popularityEN: $popularityEN, popularityFR: $popularityFR, sourceId: $sourceId, isFavorite: $isFavorite, startTime: $startTime, endTime: $endTime, pointInTime: $pointInTime, latitude: $latitude, longitude: $longitude, image: $image}';
   }
 }

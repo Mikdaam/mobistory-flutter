@@ -20,6 +20,7 @@ Future<void> _fillFromJSON (AppDatabase appDatabase) async {
 
   for (final json in jsonList) {
     final event = Event.fromJson(jsonDecode(json));
+    if (event == null) continue;
     await appDatabase.eventDao.insertEvent(event);
   }
 }
