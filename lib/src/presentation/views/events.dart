@@ -38,10 +38,26 @@ class EventsScreen extends HookWidget {
             labelStyle: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
           ),
           actions: [
-            IconButton(
-                onPressed: () {
-                },
-                icon: const Icon(Icons.sort_outlined)
+            DropdownButton(
+                underline: Container(),
+                icon: const Icon(Icons.sort_outlined, color: Colors.white),
+                items: {"Title", "Start Date", "End Date", "Popularity"}.map((e) => DropdownMenuItem<String>(value: e, child: Text(e))).toList(),
+                onChanged: (value) {
+                  switch (value) {
+                    case "Title":
+                      context.read<EventsCubit>().sortByTitle();
+                      break;
+                    case "Start Date":
+                      context.read<EventsCubit>().sortByStartDate();
+                      break;
+                    case "End Date":
+                      context.read<EventsCubit>().sortByEndDate();
+                      break;
+                    case "Popularity":
+                      context.read<EventsCubit>().sortByPopularity();
+                      break;
+                  }
+                }
             ),
             IconButton(
                 onPressed: () {
@@ -102,7 +118,10 @@ class EventsScreen extends HookWidget {
   }
 
   Widget _buildLoading() {
-    return const Center(child: CircularProgressIndicator());
+    // build a beautiful shimmer
+    return const Center(
+      child: CircularProgressIndicator(),
+    );
   }
 
   _buildEventsTimeline(BuildContext context, EventsState state) {
@@ -232,7 +251,7 @@ class CustomSearchDelegate extends SearchDelegate {
             onPressed: () {
               query = '';
             },
-            icon: const Icon(Icons.clear_outlined)
+            icon: const Icon(Icons.cancel_rounded)
         )
     ];
   }
@@ -278,7 +297,6 @@ class CustomSearchDelegate extends SearchDelegate {
         child: Wrap(
           spacing: 5.0,
           children: const [
-            Chip(label: Text("Title"), avatar: Icon(Icons.title), backgroundColor: Colors.white70),
             Chip(label: Text('Start Date'), avatar: Icon(Icons.calendar_today), backgroundColor: Colors.white70),
             Chip(label: Text('End Date'), avatar: Icon(Icons.calendar_today), backgroundColor: Colors.white70),
             Chip(label: Text('Location'), avatar: Icon(Icons.location_on), backgroundColor: Colors.white70),
@@ -301,13 +319,19 @@ class CustomSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    return Column();
+    // search based on title, description, location, tags
+    return BlocBuilder<EventsCubit, EventsState>(
+        builder: (context, state) => _buildList(
+            state.events.where(
+                    (event) => event.labelEN!.toLowerCase().contains(query.toLowerCase()) || event.descriptionEN!.toLowerCase().contains(query.toLowerCase())
+            ).toList()
+        )
+    );
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
     return BlocBuilder<EventsCubit, EventsState>(
-        // builder: (context, state) => _buildList(state.events.where((event) => event.label!.toLowerCase().contains(query.toLowerCase())).toList())
         builder: (context, state) => _buildList(state.events)
     );
   }
