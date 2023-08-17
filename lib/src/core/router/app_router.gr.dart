@@ -31,9 +31,11 @@ class AppRouter extends _i10.RootStackRouter {
   @override
   final Map<String, _i10.PageFactory> pagesMap = {
     MainRoute.name: (routeData) {
+      final args =
+          routeData.argsAs<MainRouteArgs>(orElse: () => const MainRouteArgs());
       return _i10.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const _i1.MainScreen(),
+        child: _i1.MainScreen(key: args.key),
       );
     },
     EventsRouter.name: (routeData) {
@@ -255,15 +257,29 @@ class AppRouter extends _i10.RootStackRouter {
 
 /// generated route for
 /// [_i1.MainScreen]
-class MainRoute extends _i10.PageRouteInfo<void> {
-  const MainRoute({List<_i10.PageRouteInfo>? children})
-      : super(
+class MainRoute extends _i10.PageRouteInfo<MainRouteArgs> {
+  MainRoute({
+    _i11.Key? key,
+    List<_i10.PageRouteInfo>? children,
+  }) : super(
           MainRoute.name,
           path: '/',
+          args: MainRouteArgs(key: key),
           initialChildren: children,
         );
 
   static const String name = 'MainRoute';
+}
+
+class MainRouteArgs {
+  const MainRouteArgs({this.key});
+
+  final _i11.Key? key;
+
+  @override
+  String toString() {
+    return 'MainRouteArgs{key: $key}';
+  }
 }
 
 /// generated route for

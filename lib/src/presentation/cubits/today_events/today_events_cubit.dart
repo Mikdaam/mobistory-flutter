@@ -11,10 +11,10 @@ class TodayEventsCubit extends Cubit<TodayEventsState> {
   TodayEventsCubit(this._databaseRepository) : super(TodayEventsLoading());
 
   Future<void> loadTodayEvents() async {
-    emit(await _loadTodayEvents());
+    emit(await ploadTodayEvents());
   }
 
-  Future<TodayEventsState> _loadTodayEvents() async {
+  Future<TodayEventsState> ploadTodayEvents() async {
     final events = await _databaseRepository.getTodayEvents();
     return TodayEventsLoaded(events: events);
   }

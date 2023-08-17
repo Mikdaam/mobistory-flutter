@@ -39,8 +39,9 @@ class EventsScreen extends HookWidget {
           ),
           actions: [
             DropdownButton(
-                underline: Container(),
+                underline: const SizedBox(),
                 icon: const Icon(Icons.sort_outlined, color: Colors.white),
+                iconSize: 22,
                 items: {"Title", "Start Date", "End Date", "Popularity"}.map((e) => DropdownMenuItem<String>(value: e, child: Text(e))).toList(),
                 onChanged: (value) {
                   switch (value) {
@@ -243,6 +244,9 @@ Widget _buildList(List<Event> events) {
 }
 
 class CustomSearchDelegate extends SearchDelegate {
+  DateTime? startDate;
+  DateTime? endDate;
+
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
@@ -261,17 +265,17 @@ class CustomSearchDelegate extends SearchDelegate {
     return ThemeData(
       textTheme: const TextTheme(
         titleLarge: TextStyle(
-          color: Colors.white,
+          color: Colors.blueAccent,
           fontSize: 12.0,
           fontWeight: FontWeight.w500,
         ),
       ),
       appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.white,
       ),
       inputDecorationTheme: const InputDecorationTheme(
         hintStyle: TextStyle(
-          color: Colors.white,
+          color: Colors.blueAccent,
           fontSize: 14.0,
           fontWeight: FontWeight.w500,
         ),
@@ -281,7 +285,87 @@ class CustomSearchDelegate extends SearchDelegate {
 
   @override
   PreferredSizeWidget buildBottom(BuildContext context) {
+    /*final startDate = useState<DateTime?>(null);
+    final endDate = useState<DateTime?>(null);*/
+
     return PreferredSize(
+      preferredSize: const Size.fromHeight(85.0),
+      child: StatefulBuilder(
+        builder: (context, setState) => Container(
+          width: double.infinity,
+          padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+          decoration: const BoxDecoration(
+            border: Border(
+              top: BorderSide(
+                color: Colors.white70,
+                width: 1.0,
+              ),
+            ),
+          ),
+          child: Wrap(
+            spacing: 5.0,
+            children: [
+              ActionChip(
+                  label: startDate == null ? const Text('Start Date') : Text("${startDate!.year}/${startDate!.month}/${startDate!.day}"), // "${startDate!.year}/${startDate!.month}/${startDate!.day}
+                  avatar: const CircleAvatar(
+                    child: Icon(Icons.calendar_today, size: 10)
+                  ),
+                  padding: const EdgeInsets.all(2.0),
+                  backgroundColor: Colors.white,
+                  shape: const StadiumBorder(
+                      side: BorderSide(
+                        width: 1,
+                        color: Colors.blueAccent,
+                      )
+                  ),
+                  onPressed: () {
+                    showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(1),
+                        lastDate: DateTime(2100),
+                    ).then((value) {
+                      setState(() {
+                        startDate = value;
+                      });
+                    });
+                  }
+              ),
+              ActionChip(
+                  label: endDate == null ? const Text('End Date') : Text("${endDate!.year}/${endDate!.month}/${endDate!.day}"),
+                  avatar: const CircleAvatar(
+                    child: Icon(Icons.calendar_today, size: 10)
+                  ),
+                  padding: const EdgeInsets.all(2.0),
+                  backgroundColor: Colors.white,
+                  shape: const StadiumBorder(
+                      side: BorderSide(
+                        width: 1,
+                        color: Colors.blueAccent,
+                      )
+                  ),
+                  onPressed: () {
+                    showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(1),
+                        lastDate: DateTime(2100)
+                    ).then((value) {
+                      setState(() {
+                        endDate = value;
+                      });
+                    });
+                  }
+              ),
+              const Chip(label: Text('Popularity'), avatar: Icon(Icons.star), backgroundColor: Colors.white70),
+              const Chip(label: Text('Tag'), avatar: Icon(Icons.tag), backgroundColor: Colors.white70),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    /*return PreferredSize(
       preferredSize: const Size.fromHeight(85.0),
       child: Container(
         width: double.infinity,
@@ -296,15 +380,61 @@ class CustomSearchDelegate extends SearchDelegate {
         ),
         child: Wrap(
           spacing: 5.0,
-          children: const [
-            Chip(label: Text('Start Date'), avatar: Icon(Icons.calendar_today), backgroundColor: Colors.white70),
-            Chip(label: Text('End Date'), avatar: Icon(Icons.calendar_today), backgroundColor: Colors.white70),
-            Chip(label: Text('Location'), avatar: Icon(Icons.location_on), backgroundColor: Colors.white70),
-            Chip(label: Text('Tag'), avatar: Icon(Icons.tag), backgroundColor: Colors.white70),
+          children: [
+            ActionChip(
+                label: startDate.value == null ? const Text('Start Date') : Text(startDate.value.toString()),
+                avatar: const CircleAvatar(
+                  child: Icon(Icons.calendar_today, size: 10)
+                ),
+                padding: const EdgeInsets.all(2.0),
+                backgroundColor: Colors.white,
+                shape: const StadiumBorder(
+                    side: BorderSide(
+                      width: 1,
+                      color: Colors.blueAccent,
+                    )
+                ),
+                onPressed: () {
+                  showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(1),
+                      lastDate: DateTime(2100),
+                  ).then((value) {
+                    startDate.value = value;
+                  });
+                }
+            ),
+            ActionChip(
+                label: endDate.value == null ? const Text('End Date') : Text(endDate.toString()),
+                avatar: const CircleAvatar(
+                  child: Icon(Icons.calendar_today, size: 10)
+                ),
+                padding: const EdgeInsets.all(2.0),
+                backgroundColor: Colors.white,
+                shape: const StadiumBorder(
+                    side: BorderSide(
+                      width: 1,
+                      color: Colors.blueAccent,
+                    )
+                ),
+                onPressed: () {
+                  showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(1),
+                      lastDate: DateTime(2100)
+                  ).then((value) {
+                    endDate.value = value;
+                  });
+                }
+            ),
+            const Chip(label: Text('Popularity'), avatar: Icon(Icons.star), backgroundColor: Colors.white70),
+            const Chip(label: Text('Tag'), avatar: Icon(Icons.tag), backgroundColor: Colors.white70),
           ],
         ),
       ),
-    );
+    );*/
   }
 
   @override
